@@ -37,7 +37,8 @@ def test_module(base_url, module, session, headers, verify, debug):
         url = base_url.rstrip("/") + path
         try:
             r = session.get(url, headers=headers, timeout=5, allow_redirects=False, verify=verify)
-            if r.status_code in (200, 403):
+            valid_403 = not any(path.endswith(ext) for ext in [".txt", ".md", ".rst"])
+            if r.status_code == 200 or (r.status_code == 403 and valid_403):
                 version = None
                 if path.endswith(".info.yml") and r.status_code == 200:
                     version = extract_version(r.text)
