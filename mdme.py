@@ -3,6 +3,8 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import re
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 COMMON_PATHS = [
     "/modules/contrib/{mod}/{mod}.info.yml",
