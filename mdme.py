@@ -37,6 +37,11 @@ def test_module(base_url, module, session, headers, verify, debug):
         url = base_url.rstrip("/") + path
         try:
             r = session.get(url, headers=headers, timeout=5, allow_redirects=False, verify=verify)
+            if r.status_code == 302:
+                location = r.headers.get("Location", "")
+                if any(part in location.lower() for part in ["/user/login", "/login", "/accounts", "/auth", "/signin"]):
+                    continue
+
             valid_403 = not any(path.endswith(ext) for ext in [".txt", ".md", ".rst"])
             if r.status_code == 200 or (r.status_code == 403 and valid_403):
                 version = None
